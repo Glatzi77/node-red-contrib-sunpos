@@ -21,6 +21,8 @@ This node calculates the position of the sun at a given location.  It is configu
 
 This node can optionally receive a time via an input message containing **msg.time** conforming to Javascript Date object, otherwise it will use the current time.
 
+Also there is an option to overide the calculated sunset/sunrise values via input containing **msg.sunriseoffset** or **msg.sunsetoffset**.
+
 This node emits a <b>msg.payload</b> with the following properties:
 * <b>startTime</b>: time of day that constitutes the start of daylight hours (inclusive of offset)
 * <b>endTime</b>: time of day that constitutes the end of daylight hours (inclusive of offset)
