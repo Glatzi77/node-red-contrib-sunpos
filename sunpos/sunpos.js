@@ -36,7 +36,10 @@ module.exports = function(RED) {
     this.on("input", function(msg) {
       var now =
         typeof msg.time != "undefined" ? new Date(msg.time) : new Date();
-
+      var mySunriseOffset =
+        typeof msg.sunriseoffset != "undefined" ? parseInt(msg.sunriseoffset) : 0;
+      var mySunsetOffset =
+        typeof msg.sunsetoffset != "undefined" ? parseInt(msg.sunsetoffset) : 0;
       var sunPosition = SunCalc.getPosition(now, location.lat, location.lon);
       var sunTimes = SunCalc.getTimes(now, location.lat, location.lon);
       var altitudeDegrees = 180 / Math.PI * sunPosition.altitude;
@@ -44,10 +47,10 @@ module.exports = function(RED) {
 
       var nowMillis = now.getTime();
       var startMillis =
-        sunTimes[stConfig.start].getTime() + stConfig.startOffset * 60000;
+        sunTimes[stConfig.start].getTime() + (stConfig.startOffset + mySunriseOffset) * 60000;
       var endMillis =
-        sunTimes[stConfig.end].getTime() + stConfig.endOffset * 60000;
-
+        sunTimes[stConfig.end].getTime() + (stConfig.endOffset + mySunsetOffset) * 60000;
+      
       var sunInSky = nowMillis > startMillis && nowMillis < endMillis;
       if (sunInSky) {
         node.status({
